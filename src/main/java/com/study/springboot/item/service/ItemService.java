@@ -2,18 +2,20 @@ package com.study.springboot.item.service;
 
 import com.study.springboot.item.dto.ItemFormDto;
 import com.study.springboot.item.dto.ItemImgDto;
+import com.study.springboot.item.dto.ItemSearchDto;
 import com.study.springboot.item.entity.Item;
 import com.study.springboot.item.entity.ItemImg;
 import com.study.springboot.item.repository.ItemImgRepository;
 import com.study.springboot.item.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
-import java.nio.channels.MulticastChannel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,10 +62,24 @@ public class ItemService {
 
         return itemFormDto;
     }
-    public Long updateItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) {
+
+    public Long updateItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws IOException {
         Item item = itemRepository.findById(itemFormDto.getId()).orElseThrow(EntityNotFoundException::new);
         item.updateItem(itemFormDto);
+        List<Long> itemImgIds = itemFormDto.getItemImgIds();
 
-        return null;
+        for (int i = 0; i < itemImgFileList.size(); i++) {
+            itemImgService.updateItemImg(itemImgIds.get(i), itemImgFileList.get(i));
+        }
+
+        return item.getId();
     }
+
+    public Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+        return itemRepository.getAdminItemPage(itemSearchDto, pageable);
+    }
+
+
+
+
 }
