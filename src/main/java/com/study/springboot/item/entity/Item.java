@@ -1,5 +1,6 @@
 package com.study.springboot.item.entity;
 
+import com.study.springboot.exception.OutOfStockException;
 import com.study.springboot.item.constant.ItemSellStatus;
 import com.study.springboot.item.dto.ItemFormDto;
 import com.study.springboot.utils.entity.BaseEntity;
@@ -45,6 +46,14 @@ public class Item extends BaseEntity {
         this.stockNumber = itemFormDto.getStockNumber();
         this.itemDetail = itemFormDto.getItemDetail();
         this.itemSellStatus = itemFormDto.getItemSellStatus();
+    }
+
+    public void removeStock(int stockNumber) {
+        int restStock = this.stockNumber - stockNumber;
+        if(restStock<0) {
+            throw new OutOfStockException("상품의 재고가 부족합니다. (현재 재고 수량: " + this.stockNumber + ")");
+        }
+        this.stockNumber = restStock;
     }
 
 

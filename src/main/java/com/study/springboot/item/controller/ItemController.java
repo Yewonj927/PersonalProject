@@ -2,6 +2,7 @@ package com.study.springboot.item.controller;
 
 import com.study.springboot.item.dto.ItemFormDto;
 import com.study.springboot.item.dto.ItemSearchDto;
+import com.study.springboot.item.dto.MainItemDto;
 import com.study.springboot.item.entity.Item;
 import com.study.springboot.item.service.ItemService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
@@ -107,5 +109,12 @@ public class ItemController {
         model.addAttribute("maxPage", 5);
 
         return "item/itemList";
+    }
+
+    @GetMapping(value = "/item/{itemId}")
+    public String itemDtl(Model model, @PathVariable("itemId") Long itemId) {
+        ItemFormDto itemFormDto = itemService.getItemDetail(itemId);
+        model.addAttribute("item", itemFormDto);
+        return "item/itemDtl";
     }
 }

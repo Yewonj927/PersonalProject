@@ -22,8 +22,8 @@ public class ItemImg extends BaseEntity {
 
     private String imgName;
     private String oriImgName;
-    private String ImgUrl;
-    private String repImgYn;
+    private String imgUrl;
+    private String repImgYn; //대표 이미지
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Item_id")
@@ -32,6 +32,6 @@ public class ItemImg extends BaseEntity {
     public void updateImg(String imgName, String oriImgName, String imgUrl) {
         this.imgName = imgName;
         this.oriImgName = oriImgName;
-        this.ImgUrl = imgUrl;
+        this.imgUrl = imgUrl;
     }
 }
